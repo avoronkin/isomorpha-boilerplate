@@ -11,7 +11,7 @@ var wait = require('gulp-wait');
 var watch = require('gulp-watch');
 var clean = require('gulp-clean');
 var runSequence = require('gulp-run-sequence');
-
+var reactify = require('reactify');
 
 
 var js_build_name = 'build';
@@ -67,9 +67,10 @@ gulp.task('browser_scripts', function () {
         ignore: [
             './lib-cov/ajax',
             './lib-cov/validators',
-            'modella-mongo'
+            'modella-mongo',
+            'node-jsx'
         ],
-        // transform: ['jstify'],
+        transform: ['reactify'],
         // shim: {},
         debug: false
     }))
