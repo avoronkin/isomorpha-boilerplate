@@ -11,14 +11,13 @@ if (!isClient) {
 }
 
 var homeComponent = require('../shared/components/home.jsx');
+var errorComponent = require('../shared/components/404.jsx');
 
 module.exports = [{
         pattern: '/',
         name: 'home',
         handlers: [
-
             function (req, res) {
-
                 res.renderComponent(homeComponent, {
                     name: (isClient ? 'client' : 'server')
                 })
@@ -32,12 +31,7 @@ module.exports = [{
         pattern: '*',
         name: '404',
         handlers: function (req, res, next) {
-            console.log('404 handler');
-
-            if (!isClient) {
-                res.send('error 404')
-            }
-
+            res.renderComponent(errorComponent)
         }
     }
 

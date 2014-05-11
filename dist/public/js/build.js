@@ -27224,7 +27224,7 @@ window.onload = function(){
     page();
 }
 
-},{"../shared/reactMiddleware":171,"../shared/routeTable":172,"../shared/settings":173,"./pagejsAdapter":167,"page":30}],167:[function(require,module,exports){
+},{"../shared/reactMiddleware":173,"../shared/routeTable":174,"../shared/settings":175,"./pagejsAdapter":167,"page":30}],167:[function(require,module,exports){
 var _ = require('lodash');
 
 module.exports = function (routeTable, page) {
@@ -27273,37 +27273,60 @@ var React = require('react');
 
 module.exports = React.createClass({displayName: 'exports',
   render: function() {
-      return React.DOM.div(null, "Hello ", this.props.name);
+      return React.DOM.div(null, "Ups... page not found");
     }
 });
 
 },{"react":165}],169:[function(require,module,exports){
+/**
+ * @jsx React.DOM
+ */
+var React = require('react');
+
+module.exports = React.createClass({displayName: 'exports',
+  render: function() {
+      return React.DOM.div(null, "Hello ", this.props.name);
+    }
+});
+
+},{"react":165}],170:[function(require,module,exports){
+/**
+ * @jsx React.DOM
+ */
+var React = require('react');
+
+module.exports = React.createClass({displayName: 'exports',
+  render: function() {
+      return React.DOM.div(null, "test test test");
+    }
+});
+
+},{"react":165}],171:[function(require,module,exports){
 var isClient = (typeof window != "undefined");
 var Test = require('../models/Test');
+
+if (!isClient) {
+    var nodeJsx = require('node-jsx');
+    nodeJsx.install({
+        extension: '.jsx'
+    });
+}
+
+var testComponent = require('../components/test.jsx');
 
 module.exports.list = function (req, res, next) {
 
     console.log('test handler');
-    if (!isClient) {
-        res.send('test')
-    } else {
 
-        Test.all(function(err, u) {
-            console.log('get all', u) 
-        });
+    Test.all(function (err, u) {
+        console.log('get all', u)
+        res.renderComponent(testComponent);
+    });
 
-        var test = new Test({
-            username: 'toritor',
-            email: 'feirioe@fldgkd.ro'
-        });
-
-        test.save();
-    }
 
 }
 
-
-},{"../models/Test":170}],170:[function(require,module,exports){
+},{"../components/test.jsx":170,"../models/Test":172,"node-jsx":1}],172:[function(require,module,exports){
 var modella = require('modella');
 var validators = require('modella-validators');
 var ajaxSync = require('modella-ajax');
@@ -27329,7 +27352,7 @@ Test.attr('_id')
 
 module.exports = Test;
 
-},{"is-browser":4,"modella":21,"modella-ajax":6,"modella-mongo":1,"modella-validators":14}],171:[function(require,module,exports){
+},{"is-browser":4,"modella":21,"modella-ajax":6,"modella-mongo":1,"modella-validators":14}],173:[function(require,module,exports){
 var React = require('react');
 var isClient = require('is-browser');
 
@@ -27356,7 +27379,7 @@ module.exports = function (params) {
     }
 }
 
-},{"is-browser":4,"react":165}],172:[function(require,module,exports){
+},{"is-browser":4,"react":165}],174:[function(require,module,exports){
 var fs = require('fs');
 var path = require('path');
 var testController = require('./controllers/test');
@@ -27370,14 +27393,13 @@ if (!isClient) {
 }
 
 var homeComponent = require('../shared/components/home.jsx');
+var errorComponent = require('../shared/components/404.jsx');
 
 module.exports = [{
         pattern: '/',
         name: 'home',
         handlers: [
-
             function (req, res) {
-
                 res.renderComponent(homeComponent, {
                     name: (isClient ? 'client' : 'server')
                 })
@@ -27391,19 +27413,14 @@ module.exports = [{
         pattern: '*',
         name: '404',
         handlers: function (req, res, next) {
-            console.log('404 handler');
-
-            if (!isClient) {
-                res.send('error 404')
-            }
-
+            res.renderComponent(errorComponent)
         }
     }
 
 
 ];
 
-},{"../shared/components/home.jsx":168,"./controllers/test":169,"fs":1,"node-jsx":1,"path":2}],173:[function(require,module,exports){
+},{"../shared/components/404.jsx":168,"../shared/components/home.jsx":169,"./controllers/test":171,"fs":1,"node-jsx":1,"path":2}],175:[function(require,module,exports){
 module.exports = {
     rootElId: 'react-root'
 }
