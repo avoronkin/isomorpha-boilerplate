@@ -1,5 +1,6 @@
 var fs = require('fs');
 var path = require('path');
+var testController = require('./controllers/test');
 
 var isClient = (typeof window != "undefined");
 
@@ -15,7 +16,7 @@ module.exports = [{
             },
             function (req, res) {
                 if (!isClient) {
-                    fs.readFile(path.resolve(__dirname, '../../dist/layout.html'), function (err, data) {
+                    fs.readFile(path.resolve(__dirname, '../../../dist/layout.html'), function (err, data) {
                         if (err) throw err;
                         console.log('data', data.toString());
                         res.send(data.toString())
@@ -27,15 +28,8 @@ module.exports = [{
     }, {
         pattern: '/test',
         name: 'test',
-        handlers: function (req, res, next) {
-            console.log('test handler');
-
-            if (!isClient) {
-                res.send('test')
-            }
-
-        }
-    }, {
+        handlers: testController.list 
+     },  {
         pattern: '*',
         name: '404',
         handlers: function (req, res, next) {

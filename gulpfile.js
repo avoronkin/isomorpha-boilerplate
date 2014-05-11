@@ -64,6 +64,11 @@ gulp.task('browser_scripts', function () {
     return gulp.src('./src/js/browser/app.js', {
         read: false
     }).pipe(browserify({
+        ignore: [
+            './lib-cov/ajax',
+            './lib-cov/validators',
+            'modella-mongo'
+        ],
         // transform: ['jstify'],
         // shim: {},
         debug: false
@@ -98,7 +103,7 @@ gulp.task('nodemon', function () {
 });
 
 gulp.task('watch_browser_scripts', function () {
-    gulp.watch(['./src/js/browser/**/*','./src/js/shared/**/*'], ['browser_scripts']);
+    gulp.watch(['./src/js/browser/**/*', './src/js/shared/**/*'], ['browser_scripts']);
 });
 
 gulp.task('watch_styles', function () {
