@@ -11,17 +11,15 @@ var apiApp = require('./api/app');
 var reactMiddleware = require('../shared/reactMiddleware');
 var settings = require('../shared/settings');
 var fs = require('fs');
-// require('node-jsx').install({extension: '.jsx'});
 
-var layoutHtml = fs.readFileSync(path.resolve(__dirname, '../../../dist/layout.html'), {
-    encoding: 'utf8'
-});
-console.log('layout', layoutHtml);
 
 app.use(reactMiddleware({
     rootElId: settings.rootElId,
-    layoutHtml: layoutHtml
+    layoutName: 'layout',
+    firstRender: true
 }));
+app.set('view engine', 'jade');
+app.set('views', path.resolve(__dirname, '../../../dist'));
 app.use(logger());
 app.use(favicon(path.resolve(__dirname, '../../../dist/public/favicon.ico')));
 app.use(serveStatic(path.resolve(__dirname, '../../../dist/public')));

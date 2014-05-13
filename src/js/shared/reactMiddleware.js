@@ -6,18 +6,25 @@ var isClient = require('is-browser');
 
 
 module.exports = function (params) {
-
+    
     return function (req, res, next) {
+        req.firstRender = params.firstRender;
 
         res.renderComponent = function (Component, data, callback) {
-            var html = React.renderComponentToString(Component(data));
+
             if (isClient) {
-                document.getElementById(params.rootElId).innerHTML = html;
+                React.renderComponent(Component(data), document.getElementById(params.rootElId));
             } else {
-                var layoutHtml = params.layoutHtml;
-                layoutHtml = layoutHtml.replace("######", html)
-                res.send(layoutHtml);
+                var html = React.renderComponentToString(Component(data));
+
+                res.render(params.layoutName, {
+                    data: data,
+                    component: html
+                });
+
             }
+
+            params.firstRender = false;
         }
 
         next();

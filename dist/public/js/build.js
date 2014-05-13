@@ -27210,16 +27210,31 @@ var pagejsAdapter = require('./pagejsAdapter');
 var reactMiddleware = require('../shared/reactMiddleware');
 var page = require('page');
 var settings = require('../shared/settings');
+var firstRender = true;
 
-page('*', reactMiddleware({rootElId: settings.rootElId}));
-page('*', function(req, res, next){
+// page('*', function (req, res, next) {
+//     if (firstRender) {
+//         console.log('first render')
+//     } else {
+//         console.log('not first render');
+//     }
 
-    console.log('render something')
-    next();
-})
+//     next();
+// })
+
+page('*', reactMiddleware({
+    rootElId: settings.rootElId,
+    firstRender: true
+}));
+
+// page('*', function (req, res, next) {
+//     firstRender = false;
+//     next();
+// })
+
 pagejsAdapter(routeTable, page);
 
-window.onload = function(){
+window.onload = function () {
     console.log('window load');
     page();
 }
@@ -27283,9 +27298,33 @@ module.exports = React.createClass({displayName: 'exports',
  */
 var React = require('react');
 
+/* module.exports = React.createClass({ */
+/*   render: function() { */
+/*       return <div>Hello {this.props.name}</div>; */
+/*     } */
+/* }); */
 module.exports = React.createClass({displayName: 'exports',
-  render: function() {
-      return React.DOM.div(null, "Hello ", this.props.name);
+
+    getInitialState: function () {
+        return {
+            count: 0
+        };
+    },
+
+    handleMouseDown: function () {
+        alert('I was told: ' + this.props.message);
+        this.setState({
+            count: this.state.count + 1
+        });
+    },
+
+    render: function () {
+
+        return React.DOM.div(null ,  " ", React.DOM.div( {class:  "clicker", onMouseDown:   this.handleMouseDown } , 
+            "Give me the message! " ),
+        React.DOM.div( {class:"message"}, "Message conveyed",
+          React.DOM.span( {class:"count"}, this.state.count), " time(s) " )
+      ) ;
     }
 });
 
@@ -27304,6 +27343,7 @@ module.exports = React.createClass({displayName: 'exports',
 },{"react":165}],171:[function(require,module,exports){
 var isClient = (typeof window != "undefined");
 var Test = require('../models/Test');
+var _ = require('lodash');
 
 if (!isClient) {
     var nodeJsx = require('node-jsx');
@@ -27315,18 +27355,24 @@ if (!isClient) {
 var testComponent = require('../components/test.jsx');
 
 module.exports.list = function (req, res, next) {
-
     console.log('test handler');
 
-    Test.all(function (err, u) {
-        console.log('get all', u)
-        res.renderComponent(testComponent);
-    });
+    if(isClient && req.firstRender){
+        console.log('first render on client', sharedData) 
+        res.renderComponent(testComponent, sharedData);
+    }else{
+        Test.all(function (err, u) {
+            res.renderComponent(testComponent, {
+                test: 'test',
+                data: _.invoke(u,'toJSON')
+            });
+        });
+    }
 
 
 }
 
-},{"../components/test.jsx":170,"../models/Test":172,"node-jsx":1}],172:[function(require,module,exports){
+},{"../components/test.jsx":170,"../models/Test":172,"lodash":5,"node-jsx":1}],172:[function(require,module,exports){
 var modella = require('modella');
 var validators = require('modella-validators');
 var ajaxSync = require('modella-ajax');
@@ -27361,18 +27407,25 @@ var isClient = require('is-browser');
 
 
 module.exports = function (params) {
-
+    
     return function (req, res, next) {
+        req.firstRender = params.firstRender;
 
         res.renderComponent = function (Component, data, callback) {
-            var html = React.renderComponentToString(Component(data));
+
             if (isClient) {
-                document.getElementById(params.rootElId).innerHTML = html;
+                React.renderComponent(Component(data), document.getElementById(params.rootElId));
             } else {
-                var layoutHtml = params.layoutHtml;
-                layoutHtml = layoutHtml.replace("######", html)
-                res.send(layoutHtml);
+                var html = React.renderComponentToString(Component(data));
+
+                res.render(params.layoutName, {
+                    data: data,
+                    component: html
+                });
+
             }
+
+            params.firstRender = false;
         }
 
         next();
@@ -27401,7 +27454,7 @@ module.exports = [{
         handlers: [
             function (req, res) {
                 res.renderComponent(homeComponent, {
-                    name: (isClient ? 'client' : 'server')
+                    message: (isClient ? 'client' : 'server')
                 })
             }
         ]

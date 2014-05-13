@@ -1,5 +1,6 @@
 var isClient = (typeof window != "undefined");
 var Test = require('../models/Test');
+var _ = require('lodash');
 
 if (!isClient) {
     var nodeJsx = require('node-jsx');
@@ -11,13 +12,19 @@ if (!isClient) {
 var testComponent = require('../components/test.jsx');
 
 module.exports.list = function (req, res, next) {
-
     console.log('test handler');
 
-    Test.all(function (err, u) {
-        console.log('get all', u)
-        res.renderComponent(testComponent);
-    });
+    if(isClient && req.firstRender){
+        console.log('first render on client', sharedData) 
+        res.renderComponent(testComponent, sharedData);
+    }else{
+        Test.all(function (err, u) {
+            res.renderComponent(testComponent, {
+                test: 'test',
+                data: _.invoke(u,'toJSON')
+            });
+        });
+    }
 
 
 }

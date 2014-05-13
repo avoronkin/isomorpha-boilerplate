@@ -1,0 +1,16 @@
+doctype html
+html(lang="en")
+  head
+    title
+    meta(charset='utf-8')
+    //INJECT:head
+    //END INJECT
+  body
+    header
+      a(href='/') home
+      a(href='/test') test
+      a(href='/not') error
+    #react-root!= component
+    script!= 'var sharedData = '+ JSON.stringify(data)
+    //INJECT:body
+    //END INJECT

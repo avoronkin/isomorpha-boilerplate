@@ -19,7 +19,7 @@ module.exports = [{
         handlers: [
             function (req, res) {
                 res.renderComponent(homeComponent, {
-                    name: (isClient ? 'client' : 'server')
+                    message: (isClient ? 'client' : 'server')
                 })
             }
         ]

@@ -3,16 +3,31 @@ var pagejsAdapter = require('./pagejsAdapter');
 var reactMiddleware = require('../shared/reactMiddleware');
 var page = require('page');
 var settings = require('../shared/settings');
+var firstRender = true;
 
-page('*', reactMiddleware({rootElId: settings.rootElId}));
-page('*', function(req, res, next){
+// page('*', function (req, res, next) {
+//     if (firstRender) {
+//         console.log('first render')
+//     } else {
+//         console.log('not first render');
+//     }
 
-    console.log('render something')
-    next();
-})
+//     next();
+// })
+
+page('*', reactMiddleware({
+    rootElId: settings.rootElId,
+    firstRender: true
+}));
+
+// page('*', function (req, res, next) {
+//     firstRender = false;
+//     next();
+// })
+
 pagejsAdapter(routeTable, page);
 
-window.onload = function(){
+window.onload = function () {
     console.log('window load');
     page();
 }
