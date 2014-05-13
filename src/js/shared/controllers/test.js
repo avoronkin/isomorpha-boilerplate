@@ -1,6 +1,7 @@
 var isClient = (typeof window != "undefined");
 var Test = require('../models/Test');
 var _ = require('lodash');
+var array = require('array');
 
 if (!isClient) {
     var nodeJsx = require('node-jsx');
@@ -19,6 +20,8 @@ module.exports.list = function (req, res, next) {
         res.renderComponent(testComponent, sharedData);
     }else{
         Test.all(function (err, u) {
+            var tests = array(u); 
+
             res.renderComponent(testComponent, {
                 test: 'test',
                 data: _.invoke(u,'toJSON')

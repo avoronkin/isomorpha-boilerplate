@@ -68,10 +68,25 @@ gulp.task('browser_scripts', function () {
             './lib-cov/ajax',
             './lib-cov/validators',
             'modella-mongo',
-            'node-jsx'
+            'node-jsx',
+            // 'emitter'
         ],
         transform: ['reactify'],
-        // shim: {},
+        shim: {
+            isArray: {
+                path: 'components/yields/isarray/1.0.0/index.js',
+                exports: 'isArray'
+            },
+            props: {
+                path: 'components/component/props/1.1.2/index.js',
+                exports: null
+            },
+            emitter: {
+                path: 'node_modules/emitter-component/index.js',
+                exports: null
+            }
+
+        },
         debug: false
     }))
         .pipe(rename(js_build_name + '.js'))

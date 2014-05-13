@@ -1,0 +1,7 @@
+{
+  "name": "name",
+  "dependencies": {
+    "yields/isArray": "1.0.0",
+    "component/props": "^1.1.2"
+  }
+}
