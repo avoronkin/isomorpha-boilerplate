@@ -1,33 +1,13 @@
-var routeTable = require('../shared/routeTable');
-var pagejsAdapter = require('./pagejsAdapter');
-var reactMiddleware = require('../shared/reactMiddleware');
 var page = require('page');
+var pagejsAdapter = require('isomorpha-pagejs-adapter');
+var reactMiddleware = require('isomorpha-reactjs-middleware');
 var settings = require('../shared/settings');
-var firstRender = true;
+var routeTable = require('../shared/routeTable');
 
-// page('*', function (req, res, next) {
-//     if (firstRender) {
-//         console.log('first render')
-//     } else {
-//         console.log('not first render');
-//     }
-
-//     next();
-// })
-
-page('*', reactMiddleware({
-    rootElId: settings.rootElId,
-    firstRender: true
-}));
-
-// page('*', function (req, res, next) {
-//     firstRender = false;
-//     next();
-// })
+page('*', reactMiddleware(settings.reactMiddleware));
 
 pagejsAdapter(routeTable, page);
 
 window.onload = function () {
-    console.log('window load');
     page();
 }

@@ -1,3 +1,6 @@
 module.exports = {
-    rootElId: 'react-root'
+    reactMiddleware: {
+        rootElId: 'react-root',
+        layoutName: 'layout'
+    },
 }
