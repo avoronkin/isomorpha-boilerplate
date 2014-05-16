@@ -28831,42 +28831,6 @@ module.exports = React.createClass({displayName: 'exports',
  */
 var React = require('react');
 
-/* module.exports = React.createClass({ */
-/*   render: function() { */
-/*       return <div>Hello {this.props.name}</div>; */
-/*     } */
-/* }); */
-module.exports = React.createClass({displayName: 'exports',
-
-    getInitialState: function () {
-        return {
-            count: 0
-        };
-    },
-
-    handleMouseDown: function () {
-        alert('I was told: ' + this.props.message);
-        this.setState({
-            count: this.state.count + 1
-        });
-    },
-
-    render: function () {
-
-        return React.DOM.div(null ,  " ", React.DOM.div( {class:  "clicker", onMouseDown:   this.handleMouseDown } , 
-            "Give me the message! " ),
-        React.DOM.div( {class:"message"}, "Message conveyed",
-          React.DOM.span( {class:"count"}, this.state.count), " time(s) " )
-      ) ;
-    }
-});
-
-},{"react":178}],182:[function(require,module,exports){
-/**
- * @jsx React.DOM
- */
-var React = require('react');
-
 var ItemList = React.createClass({displayName: 'ItemList',
   render: function() {
       var itemNodes = this.props.data.map(function (item, index) {
@@ -28890,7 +28854,22 @@ var Item = React.createClass({displayName: 'Item',
 
 module.exports = ItemList;
 
-},{"react":178}],183:[function(require,module,exports){
+},{"react":178}],182:[function(require,module,exports){
+var isClient = (typeof window != "undefined");
+if (!isClient) {
+    var nodeJsx = require('node-jsx');
+    nodeJsx.install({
+        extension: '.jsx'
+    });
+}
+
+var errorComponent = require('../components/error404.jsx');
+
+module.exports = function (req, res) {
+    res.renderComponent(errorComponent);
+}
+
+},{"../components/error404.jsx":180,"node-jsx":13}],183:[function(require,module,exports){
 var isClient = (typeof window != "undefined");
 var Test = require('../models/Test');
 var _ = require('lodash');
@@ -28925,7 +28904,7 @@ module.exports.list = function (req, res, next) {
 
 }
 
-},{"../components/test.jsx":182,"../models/Test":184,"array":5,"lodash":19,"node-jsx":13}],184:[function(require,module,exports){
+},{"../components/test.jsx":181,"../models/Test":184,"array":5,"lodash":19,"node-jsx":13}],184:[function(require,module,exports){
 var modella = require('modella');
 var validators = require('modella-validators');
 var ajaxSync = require('modella-ajax');
@@ -28955,28 +28934,13 @@ module.exports = Test;
 var fs = require('fs');
 var path = require('path');
 var testController = require('./controllers/test');
-var isClient = (typeof window != "undefined");
-
-if (!isClient) {
-    var nodeJsx = require('node-jsx');
-    nodeJsx.install({
-        extension: '.jsx'
-    });
-}
-
-var homeComponent = require('../shared/components/home.jsx');
-var errorComponent = require('../shared/components/404.jsx');
+var homeController = require('./controllers/test');
+var errorController = require('./controllers/error404');
 
 module.exports = [{
         pattern: '/',
         name: 'home',
-        handlers: [
-            function (req, res) {
-                res.renderComponent(homeComponent, {
-                    message: (isClient ? 'client' : 'server')
-                })
-            }
-        ]
+        handlers: homeController
     }, {
         pattern: '/test',
         name: 'test',
@@ -28984,15 +28948,13 @@ module.exports = [{
     }, {
         pattern: '*',
         name: '404',
-        handlers: function (req, res, next) {
-            res.renderComponent(errorComponent)
-        }
+        handlers: errorController 
     }
 
 
 ];
 
-},{"../shared/components/404.jsx":180,"../shared/components/home.jsx":181,"./controllers/test":183,"fs":13,"node-jsx":13,"path":14}],186:[function(require,module,exports){
+},{"./controllers/error404":182,"./controllers/test":183,"fs":13,"path":14}],186:[function(require,module,exports){
 module.exports = {
     reactMiddleware: {
         rootElId: 'react-root',
