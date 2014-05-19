@@ -85,6 +85,10 @@ gulp.task('browser_scripts', function () {
             emitter: {
                 path: 'node_modules/emitter-component/index.js',
                 exports: null
+            },
+            'is-browser': {
+                path: 'node_modules/is-browser/client.js',
+                exports: null
             }
 
         },

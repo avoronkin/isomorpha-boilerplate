@@ -1580,9 +1580,16 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],14:[function(require,module,exports){
+},{}],"is-browser":[function(require,module,exports){
+module.exports=require('kskyO7');
+},{}],"kskyO7":[function(require,module,exports){
+(function (global){
+(function browserifyShim(module, define) {
 module.exports = true;
-},{}],15:[function(require,module,exports){
+}).call(global, module, undefined);
+
+}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],16:[function(require,module,exports){
 var _ = require('lodash');
 
 module.exports = function (routeTable, page) {
@@ -1623,7 +1630,7 @@ function addRoute(route, page) {
     page.apply(page, [route.pattern].concat(handlers));
 }
 
-},{"lodash":17}],16:[function(require,module,exports){
+},{"lodash":18}],17:[function(require,module,exports){
 var React = require('react');
 var firstRender = true;
 
@@ -1653,7 +1660,7 @@ module.exports = function (params) {
     };
 };
 
-},{"react":176}],17:[function(require,module,exports){
+},{"react":176}],18:[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -8442,12 +8449,12 @@ module.exports = function (params) {
 }.call(this));
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 (function (process){
 module.exports = ((typeof process != 'undefined') && process.env.TEST_COV) ? require('./lib-cov/ajax') : require('./lib/ajax');
 
 }).call(this,require("+7ZJp0"))
-},{"+7ZJp0":13,"./lib-cov/ajax":12,"./lib/ajax":19}],19:[function(require,module,exports){
+},{"+7ZJp0":13,"./lib-cov/ajax":12,"./lib/ajax":20}],20:[function(require,module,exports){
 var request = require('superagent'),
     modella = require('modella'),
     extend = require('extend');
@@ -8579,7 +8586,7 @@ function errorForRes(res) {
 }
 
 
-},{"extend":20,"modella":32,"superagent":21}],20:[function(require,module,exports){
+},{"extend":21,"modella":33,"superagent":22}],21:[function(require,module,exports){
 var hasOwn = Object.prototype.hasOwnProperty;
 
 function isPlainObject(obj) {
@@ -8658,7 +8665,7 @@ module.exports = function extend() {
 	return target;
 };
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -9624,7 +9631,7 @@ request.put = function(url, data, fn){
 
 module.exports = request;
 
-},{"emitter":"9Mt+ku","reduce":22}],22:[function(require,module,exports){
+},{"emitter":"9Mt+ku","reduce":23}],23:[function(require,module,exports){
 
 /**
  * Reduce `arr` with `fn`.
@@ -9649,7 +9656,7 @@ module.exports = function(arr, fn, initial){
   
   return curr;
 };
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 
 /**
  * Improved instanceof
@@ -9664,7 +9671,7 @@ module.exports = function instance (obj, type) {
   return obj.constructor == type;
 }
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 /**
  * https://github.com/component/type
  *
@@ -9701,12 +9708,12 @@ module.exports = function(val){
   return typeof val;
 };
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 (function (process){
 module.exports = ((typeof process != 'undefined') && process.env.TEST_COV) ? require('./lib-cov/validators') : require('./lib/validators');
 
 }).call(this,require("+7ZJp0"))
-},{"+7ZJp0":13,"./lib-cov/validators":12,"./lib/validators":31}],26:[function(require,module,exports){
+},{"+7ZJp0":13,"./lib-cov/validators":12,"./lib/validators":32}],27:[function(require,module,exports){
 module.exports = function(attr, confirmationField) {
   return function(Model) {
     Model.validate(function(model) {
@@ -9720,7 +9727,7 @@ module.exports = function(attr, confirmationField) {
   };
 };
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 module.exports = function format(attr, regex, message) {
   message = message || "does not match format"
   return function(Model) {
@@ -9733,7 +9740,7 @@ module.exports = function format(attr, regex, message) {
   }
 }
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 var is = require('../deps/instance');
 
 module.exports = function instance(attr, type) {
@@ -9748,7 +9755,7 @@ module.exports = function instance(attr, type) {
   };
 };
 
-},{"../deps/instance":23}],29:[function(require,module,exports){
+},{"../deps/instance":24}],30:[function(require,module,exports){
 module.exports = function required(attr) {
   return function(Model){
     Model.validate(function(model){
@@ -9757,7 +9764,7 @@ module.exports = function required(attr) {
   };
 }
 
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 var typeCheck = require('../deps/type');
 
 module.exports = function type(attr, type) {
@@ -9771,7 +9778,7 @@ module.exports = function type(attr, type) {
   };
 };
 
-},{"../deps/type":24}],31:[function(require,module,exports){
+},{"../deps/type":25}],32:[function(require,module,exports){
 required = require('./required');
 instance = require('./instance');
 type = require('./type');
@@ -9829,7 +9836,7 @@ exports.formatStrings.cc = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|
 exports.formatStrings.urlsafe = /^[^&$+,\/:=?@ <>\[\]\{\}\\^~%#]+$/;
 exports.formatStrings.phoneNumber = /^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/;
 
-},{"./confirms":26,"./format":27,"./instance":28,"./required":29,"./type":30}],32:[function(require,module,exports){
+},{"./confirms":27,"./format":28,"./instance":29,"./required":30,"./type":31}],33:[function(require,module,exports){
 /**
  * Module dependencies
  */
@@ -9840,7 +9847,7 @@ modella.utils = {};
 modella.utils.clone = require('./lib/utils/clone');
 modella.utils.type = require('./lib/utils/type');
 
-},{"./lib/model":33,"./lib/utils/clone":36,"./lib/utils/type":37}],33:[function(require,module,exports){
+},{"./lib/model":34,"./lib/utils/clone":37,"./lib/utils/type":38}],34:[function(require,module,exports){
 /**
  * Module dependendencies
  */
@@ -9936,7 +9943,7 @@ function createModel(name) {
   return Model;
 }
 
-},{"./proto":34,"./static":35,"./utils/clone":36,"emitter-component":38}],34:[function(require,module,exports){
+},{"./proto":35,"./static":36,"./utils/clone":37,"emitter-component":39}],35:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -10271,7 +10278,7 @@ exports.run = function(ev, done) {
   next();
 };
 
-},{"./utils/clone":36,"emitter-component":38}],35:[function(require,module,exports){
+},{"./utils/clone":37,"emitter-component":39}],36:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -10382,7 +10389,7 @@ exports.attr = function(name, options){
   return this;
 };
 
-},{"./utils/clone":36,"./utils/type":37,"is-browser":40}],36:[function(require,module,exports){
+},{"./utils/clone":37,"./utils/type":38,"is-browser":"kskyO7"}],37:[function(require,module,exports){
 /**
  * TODO: cleanup. This is a pretty big hack. inlined `clone` because
  * it cannot handle objectid instances
@@ -10443,9 +10450,9 @@ function clone(obj) {
   }
 }
 
-},{"./type":37}],37:[function(require,module,exports){
-module.exports=require(24)
-},{}],38:[function(require,module,exports){
+},{"./type":38}],38:[function(require,module,exports){
+module.exports=require(25)
+},{}],39:[function(require,module,exports){
 
 /**
  * Module dependencies.
@@ -10609,7 +10616,7 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{"indexof":39}],39:[function(require,module,exports){
+},{"indexof":40}],40:[function(require,module,exports){
 
 var indexOf = [].indexOf;
 
@@ -10620,8 +10627,6 @@ module.exports = function(arr, obj){
   }
   return -1;
 };
-},{}],40:[function(require,module,exports){
-module.exports=require(14)
 },{}],41:[function(require,module,exports){
 
 ;(function(){
@@ -28419,7 +28424,7 @@ window.onload = function () {
     page();
 }
 
-},{"../shared/routeTable":185,"../shared/settings":186,"isomorpha-pagejs-adapter":15,"isomorpha-reactjs-middleware":16,"page":41}],178:[function(require,module,exports){
+},{"../shared/routeTable":185,"../shared/settings":186,"isomorpha-pagejs-adapter":16,"isomorpha-reactjs-middleware":17,"page":41}],178:[function(require,module,exports){
 /**
  * @jsx React.DOM
  */
@@ -28689,7 +28694,7 @@ module.exports.list = function (req, res, next) {
     }
 }
 
-},{"../components/example.jsx":179,"../models/Example":184,"array":5,"lodash":17,"node-jsx":12}],183:[function(require,module,exports){
+},{"../components/example.jsx":179,"../models/Example":184,"array":5,"lodash":18,"node-jsx":12}],183:[function(require,module,exports){
 var isClient = (typeof window != "undefined");
 if (!isClient) {
     var nodeJsx = require('node-jsx');
@@ -28740,7 +28745,7 @@ Model.prototype.getGroupedErrors = function () {
 
 module.exports = Model;
 
-},{"is-browser":14,"lodash":17,"modella":32,"modella-ajax":18,"modella-mongo":12,"modella-resource":12,"modella-validators":25}],185:[function(require,module,exports){
+},{"is-browser":"kskyO7","lodash":18,"modella":33,"modella-ajax":19,"modella-mongo":12,"modella-resource":12,"modella-validators":26}],185:[function(require,module,exports){
 var homeController = require('./controllers/home');
 var exampleController = require('./controllers/example');
 var errorController = require('./controllers/error404');

@@ -37,7 +37,7 @@
     "path": "~0.4.9",
     "morgan": "~1.0.1",
     "errorhandler": "~1.0.1",
-    "modella": "git://github.com/avoronkin/modella#master",
+    "modella": "~0.2.*",
     "modella-validators": "~0.1.0",
     "modella-ajax": "~0.2.2",
     "body-parser": "~1.1.2",
@@ -50,7 +50,7 @@
     "isomorpha-expressjs-adapter": "0.0.2",
     "isomorpha-pagejs-adapter": "0.0.1",
     "express-resource": "~1.0.0",
-    "modella-resource": "~0.13.0",
+    "modella-resource": "git://github.com/avoronkin/modella-resource#master",
     "inherits": "~2.0.1"
   }
 }
