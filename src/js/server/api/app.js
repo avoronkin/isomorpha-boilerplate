@@ -1,15 +1,15 @@
 var express = require('express');
+var Resource = require('express-resource');
 var app = express();
 var bodyParser = require('body-parser');
-var testController = require('./controllers/test');
+var Example = require('../../shared/models/Example');
 
 app.use(bodyParser());
 
 app.get('/', function(req, res){
-  res.send('hello world');
+  res.send('it\'s works!');
 });
 
-app.get('/test', testController.list);
-app.post('/test', testController.create);
+app.resource('examples', Example.middleware);
 
 module.exports = app

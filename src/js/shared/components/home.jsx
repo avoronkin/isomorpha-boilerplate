@@ -3,11 +3,6 @@
  */
 var React = require('react');
 
-/* module.exports = React.createClass({ */
-/*   render: function() { */
-/*       return <div>Hello {this.props.name}</div>; */
-/*     } */
-/* }); */
 module.exports = React.createClass({
 
     getInitialState: function () {

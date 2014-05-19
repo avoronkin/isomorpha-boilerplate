@@ -48,6 +48,9 @@
     "emitter-component": "~1.1.1",
     "isomorpha-reactjs-middleware": "0.0.1",
     "isomorpha-expressjs-adapter": "0.0.2",
-    "isomorpha-pagejs-adapter": "0.0.1"
+    "isomorpha-pagejs-adapter": "0.0.1",
+    "express-resource": "~1.0.0",
+    "modella-resource": "~0.13.0",
+    "inherits": "~2.0.1"
   }
 }

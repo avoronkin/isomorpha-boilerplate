@@ -68,6 +68,7 @@ gulp.task('browser_scripts', function () {
             './lib-cov/ajax',
             './lib-cov/validators',
             'modella-mongo',
+            'modella-resource',
             'node-jsx',
             // 'emitter'
         ],

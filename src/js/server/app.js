@@ -9,8 +9,8 @@ var apiApp = require('./api/app');
 var expressAdapter = require('isomorpha-expressjs-adapter');
 var routeTable = require('../shared/routeTable');
 var settings = require('../shared/settings');
-var app = express();
 
+var app = express();
 
 app.set('view engine', 'jade');
 app.set('views', path.resolve(__dirname, '../../../dist'));
