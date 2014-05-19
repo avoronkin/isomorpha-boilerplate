@@ -46,11 +46,12 @@
     "jade": "~1.3.1",
     "array": "~0.4.3",
     "emitter-component": "~1.1.1",
-    "isomorpha-reactjs-middleware": "0.0.1",
-    "isomorpha-expressjs-adapter": "0.0.2",
-    "isomorpha-pagejs-adapter": "0.0.1",
+    "isomorpha-reactjs-middleware": "0.0.*",
+    "isomorpha-expressjs-adapter": "0.0.*",
+    "isomorpha-pagejs-adapter": "0.0.*",
     "express-resource": "~1.0.0",
     "modella-resource": "git://github.com/avoronkin/modella-resource#master",
-    "inherits": "~2.0.1"
+    "inherits": "~2.0.1",
+    "fluxxor": "~1.1.0"
   }
 }

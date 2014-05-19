@@ -15,7 +15,7 @@ module.exports = [{
     }, {
         pattern: '/examples/create',
         // name: 'create examples',
-        handlers: exampleController.create
+        handlers: [exampleController.create]
 
     }, {
         pattern: '/examples/:id',
@@ -24,7 +24,7 @@ module.exports = [{
     }, {
         pattern: '/examples/:id/edit',
         // name: 'edit example',
-        handlers: exampleController.edit
+        handlers: [exampleController.edit]
     }, {
         pattern: '*',
         // name: '404',

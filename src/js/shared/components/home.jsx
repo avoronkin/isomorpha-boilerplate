@@ -20,10 +20,11 @@ module.exports = React.createClass({
 
     render: function () {
 
-        return <div > < div class = "clicker" onMouseDown = { this.handleMouseDown } >
-            Give me the message! < /div>
-        <div class="message">Message conveyed
-          <span class="count">{this.state.count}</span > time(s) < /div>
-      </div > ;
+        return <div> 
+                 <div onMouseDown = { this.handleMouseDown } >
+                   Give me the message!
+                 </div>
+                 <div>Message conveyed <span>{this.state.count}</span> time(s) </div>
+               </div> ;
     }
 });
