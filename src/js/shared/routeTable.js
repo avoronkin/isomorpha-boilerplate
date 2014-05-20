@@ -11,24 +11,25 @@ module.exports = [{
     }, {
         pattern: '/examples',
         // name: 'example',
-        handlers: exampleController.list
-    }, {
-        pattern: '/examples/create',
-        // name: 'create examples',
-        handlers: [exampleController.create]
-
-    }, {
-        pattern: '/examples/:id',
-        // name: 'show examples',
-        handlers: exampleController.show
-    }, {
-        pattern: '/examples/:id/edit',
-        // name: 'edit example',
-        handlers: [exampleController.edit]
+        handlers: exampleController.list,
+        routes: [{
+            pattern: '/create',
+            // name: 'create examples',
+            handlers: [exampleController.create]
+        }, {
+            pattern: '/:id',
+            // name: 'show examples',
+            handlers: exampleController.show,
+            routes: [{
+                pattern: '/edit',
+                // name: 'edit example',
+                handlers: [exampleController.edit]
+            }]
+        }]
     }, {
         pattern: '*',
         // name: '404',
-        handlers: errorController 
+        handlers: errorController
     }
 
 

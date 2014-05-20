@@ -703,14 +703,14 @@ module.exports = function (routeTable, page) {
     if (!_.isArray(routeTable)) {
         throw new Error('express adapter: routeTable must be array!')
     }
-    _.each(routeTable, function(route){
+    _.each(routeTable, function (route) {
         addRoute(route, page);
     });
 }
-
-function addRoute(route, page) {
+function addRoute(route, page, parentPattern) { 
     if (_.isUndefined(route.method)) route.method = 'get';
     if (route.method !== 'get') return;
+    parentPattern = parentPattern || '';
 
     if (!route.pattern) {
         throw new Error('express adapter addRoute(): route.pattern required!', route);
@@ -719,16 +719,20 @@ function addRoute(route, page) {
         throw new Error('express adapter addRoute(): route.handlers required!', route);
     }
 
-    var handlers = [];
-
-    if (_.isArray(route.handlers)) {
-        handlers = route.handlers;
-    }
     if (_.isFunction(route.handlers)) {
-        handlers.push(route.handlers);
+        route.handlers = [route.handlers];
     }
 
-    page.apply(page, [route.pattern].concat(handlers));
+    route.pattern = parentPattern + route.pattern;
+    page.apply(page, [route.pattern].concat(route.handlers));
+
+    parentPattern = route.pattern;
+
+    if (_.isArray(route.routes)) {
+        _.each(route.routes, function (route) {
+            addRoute(route, page, parentPattern);
+        })
+    }
 }
 
 },{"lodash":14}],13:[function(require,module,exports){
@@ -27954,24 +27958,25 @@ module.exports = [{
     }, {
         pattern: '/examples',
         // name: 'example',
-        handlers: exampleController.list
-    }, {
-        pattern: '/examples/create',
-        // name: 'create examples',
-        handlers: [exampleController.create]
-
-    }, {
-        pattern: '/examples/:id',
-        // name: 'show examples',
-        handlers: exampleController.show
-    }, {
-        pattern: '/examples/:id/edit',
-        // name: 'edit example',
-        handlers: [exampleController.edit]
+        handlers: exampleController.list,
+        routes: [{
+            pattern: '/create',
+            // name: 'create examples',
+            handlers: [exampleController.create]
+        }, {
+            pattern: '/:id',
+            // name: 'show examples',
+            handlers: exampleController.show,
+            routes: [{
+                pattern: '/edit',
+                // name: 'edit example',
+                handlers: [exampleController.edit]
+            }]
+        }]
     }, {
         pattern: '*',
         // name: '404',
-        handlers: errorController 
+        handlers: errorController
     }
 
 
