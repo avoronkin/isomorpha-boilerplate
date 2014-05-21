@@ -52,6 +52,7 @@
     "express-resource": "~1.0.0",
     "modella-resource": "git://github.com/avoronkin/modella-resource#master",
     "inherits": "~2.0.1",
-    "fluxxor": "~1.1.0"
+    "fluxxor": "~1.1.0",
+    "express-shared-routes": "git://github.com/avoronkin/express-shared-routes#master"
   }
 }

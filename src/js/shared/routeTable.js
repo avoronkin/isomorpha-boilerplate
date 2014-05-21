@@ -2,33 +2,31 @@ var homeController = require('./controllers/home');
 var exampleController = require('./controllers/example');
 var errorController = require('./controllers/error404');
 
-//TODO support names for routs
-
 module.exports = [{
         pattern: '/',
-        // name: 'home',
+        name: 'home',
         handlers: homeController
     }, {
-        pattern: '/examples',
-        // name: 'example',
+        pattern: '/xamples',
+        name: 'examples',
         handlers: exampleController.list,
         routes: [{
             pattern: '/create',
-            // name: 'create examples',
-            handlers: [exampleController.create]
+            name: 'example.create',
+            handlers: exampleController.create
         }, {
             pattern: '/:id',
-            // name: 'show examples',
+            name: 'example.show',
             handlers: exampleController.show,
             routes: [{
                 pattern: '/edit',
-                // name: 'edit example',
+                name: 'example.edit',
                 handlers: [exampleController.edit]
             }]
         }]
     }, {
         pattern: '*',
-        // name: '404',
+        name: 'error.404',
         handlers: errorController
     }
 
