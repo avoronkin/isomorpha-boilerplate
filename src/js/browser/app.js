@@ -5,12 +5,10 @@ var settings = require('../shared/settings');
 var routeTable = require('../shared/routeTable');
 var mediator = require('../shared/mediator');
 
-var RouteManager = require('express-shared-routes').PagejsRouteManager;
-var routes = new RouteManager();
+var routeManager = require('../shared/routeManager');
 
 page(function(req, res, next){
     res.locals = {};
-    res.locals.getLink = routes.getLink.bind(routes);
 
     res.redirect = function(path){
         page.show(path); 
@@ -22,9 +20,9 @@ mediator.on('redirect', page.bind(this));
 
 page(reactMiddleware(settings.reactMiddleware));
 
-pagejsAdapter(routeTable, routes);
+pagejsAdapter(routeTable, routeManager);
 
-routes.applyRoutes(page);
+routeManager.applyRoutes(page);
 
 window.onload = function () {
      page();

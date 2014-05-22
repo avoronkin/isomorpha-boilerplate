@@ -10,8 +10,7 @@ var expressAdapter = require('isomorpha-expressjs-adapter');
 var routeTable = require('../shared/routeTable');
 var settings = require('../shared/settings');
 var app = express();
-var RouteManager = require('express-shared-routes').RouteManager;
-var routes = new RouteManager();
+var routeManager = require('../shared/routeManager');
 app.set('view engine', 'jade');
 app.set('views', path.resolve(__dirname, '../../../dist'));
 
@@ -22,14 +21,14 @@ app.use(serveStatic(path.resolve(__dirname, '../../../dist/public')));
 app.use('/api', apiApp);
 
 app.use(function(req, res, next){
-    res.locals.getLink = routes.getLink.bind(routes);
+    res.locals.helpers = require('../shared/helpers/route').helpers;
     next();
 });
 
-expressAdapter(routeTable, routes);
+expressAdapter(routeTable, routeManager);
 
 app.use(errorHandler());
 
-routes.applyRoutes(app);
+routeManager.applyRoutes(app);
 
 app.listen(3000);

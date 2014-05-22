@@ -29258,12 +29258,10 @@ var settings = require('../shared/settings');
 var routeTable = require('../shared/routeTable');
 var mediator = require('../shared/mediator');
 
-var RouteManager = require('express-shared-routes').PagejsRouteManager;
-var routes = new RouteManager();
+var routeManager = require('../shared/routeManager');
 
 page(function(req, res, next){
     res.locals = {};
-    res.locals.getLink = routes.getLink.bind(routes);
 
     res.redirect = function(path){
         page.show(path); 
@@ -29275,15 +29273,15 @@ mediator.on('redirect', page.bind(this));
 
 page(reactMiddleware(settings.reactMiddleware));
 
-pagejsAdapter(routeTable, routes);
+pagejsAdapter(routeTable, routeManager);
 
-routes.applyRoutes(page);
+routeManager.applyRoutes(page);
 
 window.onload = function () {
      page();
 }
 
-},{"../shared/mediator":185,"../shared/routeTable":187,"../shared/settings":188,"express-shared-routes":7,"isomorpha-pagejs-adapter":16,"isomorpha-reactjs-middleware":17,"page":41}],179:[function(require,module,exports){
+},{"../shared/mediator":186,"../shared/routeManager":188,"../shared/routeTable":189,"../shared/settings":190,"isomorpha-pagejs-adapter":16,"isomorpha-reactjs-middleware":17,"page":41}],179:[function(require,module,exports){
 /**
  * @jsx React.DOM
  */
@@ -29301,38 +29299,42 @@ module.exports = React.createClass({displayName: 'exports',
  */
 var React = require('react');
 var mediator = require('../mediator');
+var _ = require('lodash');
+
+var routeHelpers = require('../helpers/route');
 
 var ItemList = React.createClass({displayName: 'ItemList',
+    mixins: [routeHelpers],
     render: function() {
-        var getLink = this.props.getLink;
+        console.log('list', this.helpers)
 
         var itemNodes = this.props.data.map(function (item, index) {
-
-            return Item( {key:index, item:item, getLink: getLink});
+            return Item( {key:index, item:item});
         });
 
         return React.DOM.div(null, 
-                React.DOM.a( {href:getLink('example.new')}, "Add item"),
+                React.DOM.a( {href:this.helpers.getLink('example.new')}, "Add item"),
                 React.DOM.div(null, itemNodes)
                )
     }
 });
 
 var Item = React.createClass({displayName: 'Item',
+    mixins: [routeHelpers],
     deleteItem: function(){
         this.props.item.remove(function(err){
             if(err){
                 console.log('error', err); 
             }else{
-                mediator.emit('redirect', this.props.getLink('examples'));
+                mediator.emit('redirect', this.helpers.getLink('examples'));
             }
         }.bind(this));
     },
 
     render: function() {
         var item = this.props.item.toJSON();
-        var editUrl = this.props.getLink('example.edit', {id: item._id});
-        var url = this.props.getLink('example.show', {id: item._id});
+        var editUrl = this.helpers.getLink('example.edit', {id: item._id});
+        var url = this.helpers.getLink('example.show', {id: item._id});
 
         return (
             React.DOM.div(null, 
@@ -29346,18 +29348,19 @@ var Item = React.createClass({displayName: 'Item',
 
 
 var showItem = React.createClass({displayName: 'showItem',
+    mixins: [routeHelpers],
     deleteItem: function(){
         this.props.item.remove(function(err){
             if(err){
                 console.log('error', err); 
             }else{
-                mediator.emit('redirect',this.props.getLink('examples'));
+                mediator.emit('redirect',this.helpers.getLink('examples'));
             }
         }.bind(this));
     },
     render: function() {
         var item = this.props.item.toJSON();
-        var editUrl = this.props.getLink('example.edit', {id: item._id});
+        var editUrl = this.helpers.getLink('example.edit', {id: item._id});
 
         return (
             React.DOM.div(null, 
@@ -29370,6 +29373,7 @@ var showItem = React.createClass({displayName: 'showItem',
 });
 
 var editItem = React.createClass({displayName: 'editItem',
+    mixins: [routeHelpers],
     getInitialState: function() {
         return this.getData();
     },
@@ -29390,7 +29394,7 @@ var editItem = React.createClass({displayName: 'editItem',
             if(err){
                 console.log('error:', err); 
             }else{
-                mediator.emit('redirect',this.props.getLink('examples'));
+                mediator.emit('redirect',this.helpers.getLink('examples'));
             }
         }.bind(this));
     },
@@ -29463,7 +29467,7 @@ module.exports.list = ItemList;
 module.exports.show = showItem;
 module.exports.edit = editItem;
 
-},{"../mediator":185,"react":176}],181:[function(require,module,exports){
+},{"../helpers/route":185,"../mediator":186,"lodash":18,"react":176}],181:[function(require,module,exports){
 /**
  * @jsx React.DOM
  */
@@ -29507,6 +29511,7 @@ if (!isClient) {
 var errorComponent = require('../components/error404.jsx');
 
 module.exports = function (req, res) {
+    res.locals.title = 'Page not found';
     res.renderComponent(errorComponent);
 }
 
@@ -29515,7 +29520,6 @@ var isClient = (typeof window != "undefined");
 var Example = require('../models/Example');
 var _ = require('lodash');
 var mediator = require('../mediator');
-// var array = require('array');
 
 if (!isClient) {
     var nodeJsx = require('node-jsx');
@@ -29593,7 +29597,7 @@ module.exports.list = function (req, res, next) {
     }
 }
 
-},{"../components/example.jsx":180,"../mediator":185,"../models/Example":186,"lodash":18,"node-jsx":11}],184:[function(require,module,exports){
+},{"../components/example.jsx":180,"../mediator":186,"../models/Example":187,"lodash":18,"node-jsx":11}],184:[function(require,module,exports){
 var isClient = (typeof window != "undefined");
 if (!isClient) {
     var nodeJsx = require('node-jsx');
@@ -29612,11 +29616,20 @@ module.exports = function (req, res) {
 }
 
 },{"../components/home.jsx":181,"node-jsx":11}],185:[function(require,module,exports){
+var routeManager = require('../routeManager');
+
+module.exports = {
+    helpers: {
+        getLink: routeManager.getLink.bind(routeManager)
+    }
+}
+
+},{"../routeManager":188}],186:[function(require,module,exports){
 var EventEmitter = require('events').EventEmitter;
 
 module.exports = new EventEmitter();
 
-},{"events":12}],186:[function(require,module,exports){
+},{"events":12}],187:[function(require,module,exports){
 var modella = require('modella');
 var validators = require('modella-validators');
 var ajaxSync = require('modella-ajax');
@@ -29650,7 +29663,22 @@ Model.prototype.getGroupedErrors = function () {
 
 module.exports = Model;
 
-},{"is-browser":"kskyO7","lodash":18,"modella":33,"modella-ajax":19,"modella-mongo":11,"modella-resource":11,"modella-validators":26}],187:[function(require,module,exports){
+},{"is-browser":"kskyO7","lodash":18,"modella":33,"modella-ajax":19,"modella-mongo":11,"modella-resource":11,"modella-validators":26}],188:[function(require,module,exports){
+var isClient = require('is-browser');
+var PagejsRouteManager = require('express-shared-routes').PagejsRouteManager;
+var RouteManager = require('express-shared-routes').RouteManager;
+
+var routeManager;
+
+if (isClient) {
+    routeManager = new PagejsRouteManager();
+} else {
+    routeManager = new RouteManager();
+}
+
+module.exports = routeManager;
+
+},{"express-shared-routes":7,"is-browser":"kskyO7"}],189:[function(require,module,exports){
 var homeController = require('./controllers/home');
 var exampleController = require('./controllers/example');
 var errorController = require('./controllers/error404');
@@ -29686,7 +29714,7 @@ module.exports = [{
 
 ];
 
-},{"./controllers/error404":182,"./controllers/example":183,"./controllers/home":184}],188:[function(require,module,exports){
+},{"./controllers/error404":182,"./controllers/example":183,"./controllers/home":184}],190:[function(require,module,exports){
 module.exports = {
     reactMiddleware: {
         rootElId: 'react-root',

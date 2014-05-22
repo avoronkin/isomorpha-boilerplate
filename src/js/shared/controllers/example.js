@@ -2,7 +2,6 @@ var isClient = (typeof window != "undefined");
 var Example = require('../models/Example');
 var _ = require('lodash');
 var mediator = require('../mediator');
-// var array = require('array');
 
 if (!isClient) {
     var nodeJsx = require('node-jsx');
