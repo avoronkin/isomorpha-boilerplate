@@ -12,8 +12,8 @@ module.exports = [{
         handlers: exampleController.list,
         routes: [{
             pattern: '/create',
-            name: 'example.create',
-            handlers: exampleController.create
+            name: 'example.new',
+            handlers: exampleController.new
         }, {
             pattern: '/:id',
             name: 'example.show',

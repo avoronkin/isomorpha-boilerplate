@@ -1134,6 +1134,9 @@ module.exports = function (params) {
                 if(params.exportReact){//react dev tools support
                     window.React = React; 
                 }
+
+                document.title = data.title ? data.title : '';
+
                 React.renderComponent(Component(data), document.getElementById(params.rootElId));
             } else {
                 var html = React.renderComponentToString(Component(data));
@@ -29266,16 +29269,16 @@ page(function(req, res, next){
         page.show(path); 
     }
     next();
-})
+});
 
 mediator.on('redirect', page.bind(this));
 
-page('*', reactMiddleware(settings.reactMiddleware));
+page(reactMiddleware(settings.reactMiddleware));
 
 pagejsAdapter(routeTable, routes);
 
-
 routes.applyRoutes(page);
+
 window.onload = function () {
      page();
 }
@@ -29309,7 +29312,7 @@ var ItemList = React.createClass({displayName: 'ItemList',
         });
 
         return React.DOM.div(null, 
-                React.DOM.a( {href:getLink('example.create')}, "Create"),
+                React.DOM.a( {href:getLink('example.new')}, "Add item"),
                 React.DOM.div(null, itemNodes)
                )
     }
@@ -29457,7 +29460,6 @@ var editItem = React.createClass({displayName: 'editItem',
 
 
 module.exports.list = ItemList;
-/* module.exports.create = createItem; */
 module.exports.show = showItem;
 module.exports.edit = editItem;
 
@@ -29524,11 +29526,12 @@ if (!isClient) {
 
 var listComponent = require('../components/example.jsx').list;
 var editComponent = require('../components/example.jsx').edit;
-var createComponent = require('../components/example.jsx').create;
+// var newComponent = require('../components/example.jsx').new;
 var showComponent = require('../components/example.jsx').show;
 
 module.exports.show = function (req, res, next) {
     var id = req.params.id;
+    res.locals.title = 'Show controller';
     console.log('show example handler', id);
     if (isClient && req.firstRender) {
         console.log('first render on client', sharedData)
@@ -29547,6 +29550,8 @@ module.exports.show = function (req, res, next) {
 module.exports.edit = function (req, res, next) {
     var id = req.params.id;
 
+    res.locals.title = 'Edit controller';
+
     if (isClient && req.firstRender) {
         sharedData.item = new Example(sharedData.item);
         res.renderComponent(editComponent, sharedData);
@@ -29560,8 +29565,9 @@ module.exports.edit = function (req, res, next) {
 }
 
 
-module.exports.create = function (req, res, next) {
-    console.log('create example handler');
+module.exports.new = function (req, res, next) {
+    res.locals.title = 'New controller';
+    console.log('new example handler');
     res.renderComponent(editComponent, {
         item: new Example
     });
@@ -29570,6 +29576,8 @@ module.exports.create = function (req, res, next) {
 
 module.exports.list = function (req, res, next) {
     console.log('example list handler');
+
+    res.locals.title = 'List controller';
 
     if (isClient && req.firstRender) {
         sharedData.data = _(sharedData.data).map(function(attr){
@@ -29597,6 +29605,7 @@ if (!isClient) {
 var homeComponent = require('../components/home.jsx');
 
 module.exports = function (req, res) {
+    res.locals.title = 'Home page'
     res.renderComponent(homeComponent, {
         message: (isClient ? 'client' : 'server')
     })
@@ -29656,8 +29665,8 @@ module.exports = [{
         handlers: exampleController.list,
         routes: [{
             pattern: '/create',
-            name: 'example.create',
-            handlers: exampleController.create
+            name: 'example.new',
+            handlers: exampleController.new
         }, {
             pattern: '/:id',
             name: 'example.show',

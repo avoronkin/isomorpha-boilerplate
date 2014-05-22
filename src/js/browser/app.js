@@ -16,16 +16,16 @@ page(function(req, res, next){
         page.show(path); 
     }
     next();
-})
+});
 
 mediator.on('redirect', page.bind(this));
 
-page('*', reactMiddleware(settings.reactMiddleware));
+page(reactMiddleware(settings.reactMiddleware));
 
 pagejsAdapter(routeTable, routes);
 
-
 routes.applyRoutes(page);
+
 window.onload = function () {
      page();
 }

@@ -24,7 +24,7 @@ app.use('/api', apiApp);
 app.use(function(req, res, next){
     res.locals.getLink = routes.getLink.bind(routes);
     next();
-})
+});
 
 expressAdapter(routeTable, routes);
 
