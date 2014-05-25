@@ -4,7 +4,8 @@
   "description": "isomorphic app",
   "main": "src/js/server/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/js/server/app.js"
   },
   "author": "",
   "license": "ISC",
@@ -53,6 +54,11 @@
     "modella-resource": "git://github.com/avoronkin/modella-resource#master",
     "inherits": "~2.0.1",
     "fluxxor": "~1.1.0",
-    "express-shared-routes": "git://github.com/avoronkin/express-shared-routes#master"
+    "express-shared-routes": "git://github.com/avoronkin/express-shared-routes#master",
+    "passport-github": "~0.1.5",
+    "passport": "~0.2.0",
+    "express-session": "~1.2.0",
+    "cookie-parser": "~1.1.0",
+    "virgen-acl": "0.0.20"
   }
 }

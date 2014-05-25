@@ -9,26 +9,35 @@ var apiApp = require('./api/app');
 var expressAdapter = require('isomorpha-expressjs-adapter');
 var routeTable = require('../shared/routeTable');
 var settings = require('../shared/settings');
-var app = express();
 var routeManager = require('../shared/routeManager');
+var authentication = require('./authentication/app');
+
+var app = express();
+
 app.set('view engine', 'jade');
 app.set('views', path.resolve(__dirname, '../../../dist'));
 
-app.use(reactMiddleware(settings.reactMiddleware));
 app.use(logger());
 app.use(favicon(path.resolve(__dirname, '../../../dist/public/favicon.ico')));
 app.use(serveStatic(path.resolve(__dirname, '../../../dist/public')));
+
+app.use(reactMiddleware(settings.reactMiddleware));
+app.use(authentication.app);
 app.use('/api', apiApp);
 
-app.use(function(req, res, next){
-    res.locals.helpers = require('../shared/helpers/route').helpers;
+app.use(function (req, res, next) {
+    // res.locals.data = res.locals.data || [];
+    var user = req.session.passport.user || {};
+    res.locals.user = user;
+    res.locals.isAuthenticated = req.isAuthenticated();
+    res.locals.helpers = require('../shared/helpers').helpers;
     next();
 });
 
 expressAdapter(routeTable, routeManager);
 
-app.use(errorHandler());
-
 routeManager.applyRoutes(app);
 
+app.use(errorHandler());
 app.listen(3000);
+

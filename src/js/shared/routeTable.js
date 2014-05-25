@@ -1,11 +1,12 @@
 var homeController = require('./controllers/home');
 var exampleController = require('./controllers/example');
 var errorController = require('./controllers/error404');
+var authController = require('./controllers/auth');
 
 module.exports = [{
         pattern: '/',
         name: 'home',
-        handlers: homeController
+        handlers: [homeController]
     }, {
         pattern: '/xamples',
         name: 'examples',
@@ -13,7 +14,7 @@ module.exports = [{
         routes: [{
             pattern: '/create',
             name: 'example.new',
-            handlers: exampleController.new
+            handlers: [authController, exampleController.new]
         }, {
             pattern: '/:id',
             name: 'example.show',

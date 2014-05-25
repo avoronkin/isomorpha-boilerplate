@@ -12,6 +12,12 @@ html(lang="en")
           li: a(href='/') home
           li: a(href= helpers.getLink('examples')) test
           li: a(href='/not') error
+          li
+            -if(isAuthenticated){
+              a(href='/logout') Logout    
+            -}else{
+              a(href='/login') Login    
+            -}
     #react-root.container!= component
     script!= 'var sharedData = '+ JSON.stringify(data)
     //INJECT:body
