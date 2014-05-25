@@ -56,9 +56,6 @@ app.get('/auth/github/callback',
         failureRedirect: '/login'
     }),
     function (req, res) {
-        res.locals.data = res.locals.data || {};
-        res.locals.data.user = JSON.stringify(req.user);
-        console.log('req', res)
         res.redirect('/');
     });
 

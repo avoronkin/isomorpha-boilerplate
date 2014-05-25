@@ -8,12 +8,12 @@ var routeManager = require('../shared/routeManager');
 
 page(function(req, res, next){
     req.isAuthenticated = function(){
-        return !!(sharedData.user && Object.keys(sharedData.user).length);
+        return !!(sharedData.user && sharedData.user.id);
     }
     res.locals = {};
-    res.locals.isAuthenticated = req.isAuthenticated();
+    res.locals.user = sharedData.user;
 
-    console.log('isAuthenticated', req.isAuthenticated());
+    res.locals.isAuthenticated = req.isAuthenticated();
 
     res.redirect = function(path){
         page.show(path); 

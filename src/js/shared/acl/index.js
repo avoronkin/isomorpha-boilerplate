@@ -13,11 +13,11 @@ acl.allow(null, "todo", "view"); // allow everyone to view the blogs
 acl.allow("guest", "todo", ["list", "search"]) // supports arrays of actions
 
 acl.allow("user", "todo", "edit", function (err, role, resource, action, done, next) {
-    // console.log('allow', arguments);
+    if(role.id){
         done(null, true);
+    }else{
+        done(null, false);
+    }
 });
 
-var test = acl.query('user', 'todo', 'edit', function (err, allowed) {
-    console.log('user can edit', allowed);
-});
-// console.log('test', test);
+module.exports = acl;

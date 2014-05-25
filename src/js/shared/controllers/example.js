@@ -2,6 +2,8 @@ var isClient = (typeof window != "undefined");
 var Example = require('../models/Example');
 var _ = require('lodash');
 var mediator = require('../mediator');
+var acl = require('../acl');
+var async = require('async');
 
 if (!isClient) {
     var nodeJsx = require('node-jsx');
@@ -38,16 +40,50 @@ module.exports.edit = function (req, res, next) {
 
     res.locals.title = 'Edit controller';
 
-    if (isClient && req.firstRender) {
-        sharedData.item = new Example(sharedData.item);
-        res.renderComponent(editComponent, sharedData);
-    } else {
-        Example.get(id, function (err, model) {
-            res.renderComponent(editComponent, {
-                item: model
-            });
+    async.parallel([
+
+            function (callback) {
+                if (isClient && req.firstRender) {
+                    sharedData.item = new Example(sharedData.item);
+                    callback(null, sharedData);
+                } else {
+                    callback(null, null);
+                }
+            },
+
+            function (callback) {
+                if (!isClient || !req.firstRender) {
+                    Example.get(id, function (err, model) {
+                        var data = {
+                            item: model
+                        };
+                        callback(null, data);
+                    });
+                } else {
+                    callback(null, null);
+                }
+            }
+
+        ],
+
+        function (err, results) {
+            var data = results[0] || results[1];
+            async.parallel({
+                    canEdit: function (callback) {
+                        acl.query(res.locals.user, data.item , 'edit', function (err, allowed) {
+                            if (err) {
+                                callback(err, null);
+                            }else{
+                                callback(null, allowed);
+                            }
+                        });
+                    }
+                },
+                function (err, results) {
+                    data = _.extend(data, results);
+                    res.renderComponent(editComponent, data);
+                });
         });
-    }
 }
 
 
@@ -66,8 +102,8 @@ module.exports.list = function (req, res, next) {
     res.locals.title = 'List controller';
 
     if (isClient && req.firstRender) {
-        sharedData.data = _(sharedData.data).map(function(attr){
-            return new Example(attr); 
+        sharedData.data = _(sharedData.data).map(function (attr) {
+            return new Example(attr);
         });
         res.renderComponent(listComponent, sharedData);
     } else {

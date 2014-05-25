@@ -10,7 +10,6 @@ var homeComponent = require('../components/home.jsx');
 
 module.exports = function (req, res) {
     res.locals.title = 'Home page'
-    // console.log('user', req.user);
     res.renderComponent(homeComponent, {
         message: (isClient ? 'client' : 'server')
     })

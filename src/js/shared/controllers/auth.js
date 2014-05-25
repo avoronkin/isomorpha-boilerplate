@@ -11,7 +11,6 @@ module.exports = function ensureAuthenticated(req, res, next) {
 
     if (isClient) {
         window.location.href = '/login';
-        // window.location.reload(); 
     }else{
         res.redirect('/login')
     }

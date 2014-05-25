@@ -29,4 +29,8 @@ Model.prototype.getGroupedErrors = function () {
     });
 }
 
+Model.prototype.getResourceId = function(){
+    return "todo";
+}
+
 module.exports = Model;

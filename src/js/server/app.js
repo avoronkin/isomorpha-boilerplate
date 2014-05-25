@@ -28,6 +28,7 @@ app.use('/api', apiApp);
 app.use(function (req, res, next) {
     // res.locals.data = res.locals.data || [];
     var user = req.session.passport.user || {};
+    user.role_id = 'user';
     res.locals.user = user;
     res.locals.isAuthenticated = req.isAuthenticated();
     res.locals.helpers = require('../shared/helpers').helpers;
