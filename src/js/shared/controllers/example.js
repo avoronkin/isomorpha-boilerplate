@@ -34,14 +34,11 @@ module.exports.show = function (req, res, next) {
     }
 }
 
-
-module.exports.edit = function (req, res, next) {
+module.exports.edit = {};
+module.exports.edit.loadData = function (req, res, next) {
     var id = req.params.id;
 
-    res.locals.title = 'Edit controller';
-
     async.parallel([
-
             function (callback) {
                 if (isClient && req.firstRender) {
                     sharedData.item = new Example(sharedData.item);
@@ -50,7 +47,6 @@ module.exports.edit = function (req, res, next) {
                     callback(null, null);
                 }
             },
-
             function (callback) {
                 if (!isClient || !req.firstRender) {
                     Example.get(id, function (err, model) {
@@ -63,29 +59,39 @@ module.exports.edit = function (req, res, next) {
                     callback(null, null);
                 }
             }
-
         ],
-
         function (err, results) {
-            var data = results[0] || results[1];
-            async.parallel({
-                    canEdit: function (callback) {
-                        acl.query(res.locals.user, data.item , 'edit', function (err, allowed) {
-                            if (err) {
-                                callback(err, null);
-                            }else{
-                                callback(null, allowed);
-                            }
-                        });
+            if (err) next(err);
+
+            req.data = req.data || {};
+            req.data = results[0] || results[1];
+            next();
+        });
+}
+//TODO load data & check permissions on server only...
+module.exports.edit.checkPermissions = function (req, res, next) {
+    async.parallel({
+            canEdit: function (callback) {
+                acl.query(res.locals.user, req.data.item, 'edit', function (err, allowed) {
+                    if (err) {
+                        callback(err, null);
+                    } else {
+                        callback(null, allowed);
                     }
-                },
-                function (err, results) {
-                    data = _.extend(data, results);
-                    res.renderComponent(editComponent, data);
                 });
+            }
+        },
+        function (err, results) {
+            if (err) next(err);
+            req.data = _.extend(req.data, results);
+            next();
         });
 }
 
+module.exports.edit.renderComponent = function (req, res, next) {
+    res.locals.title = 'Edit controller';
+    res.renderComponent(editComponent, req.data);
+}
 
 module.exports.new = function (req, res, next) {
     res.locals.title = 'New controller';

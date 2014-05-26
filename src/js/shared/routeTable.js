@@ -22,7 +22,7 @@ module.exports = [{
             routes: [{
                 pattern: '/edit',
                 name: 'example.edit',
-                handlers: [exampleController.edit]
+                handlers: [exampleController.edit.loadData, exampleController.edit.checkPermissions, exampleController.edit.renderComponent]
             }]
         }]
     }, {
