@@ -3,5 +3,5 @@ var routeHelpers = require('./route');
 
 
 module.exports = {
-    helpers:  _.extend({}, routeHelpers) 
+    helpers:  _.extend({}, routeHelpers)
 };

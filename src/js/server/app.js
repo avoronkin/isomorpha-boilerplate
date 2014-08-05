@@ -17,7 +17,7 @@ var app = express();
 app.set('view engine', 'jade');
 app.set('views', path.resolve(__dirname, '../../../dist'));
 
-app.use(logger());
+app.use(logger('combined'));
 app.use(favicon(path.resolve(__dirname, '../../../dist/public/favicon.ico')));
 app.use(serveStatic(path.resolve(__dirname, '../../../dist/public')));
 
@@ -41,4 +41,3 @@ routeManager.applyRoutes(app);
 
 app.use(errorHandler());
 app.listen(3000);
-

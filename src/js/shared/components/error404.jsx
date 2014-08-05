@@ -6,7 +6,6 @@ var React = require('react');
 module.exports = React.createClass({
 
     render: function () {
-
-        return <div>nnnnnnnnnnnnn</div> ;
+        return <div> ups ... page not found</div> ;
     }
 });

@@ -1,7 +1,6 @@
 var isClient = (typeof window != "undefined");
 if (!isClient) {
-    var nodeJsx = require('node-jsx');
-    nodeJsx.install({
+    require('node-jsx').install({
         extension: '.jsx'
     });
 }

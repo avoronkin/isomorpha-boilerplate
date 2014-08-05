@@ -30,10 +30,12 @@ passport.use(new GitHubStrategy({
 
 var app = express();
 
-app.use(cookieParser()) // required before session.
+app.use(cookieParser('ghgjhghjgjhguyuyyiuiuyuyuysdfv')) // required before session.
 app.use(session({
     secret: 'ertghtjlgflh;kdlipo5i9045tgjnvbu4tujgijjigjgjmdklngmbnmblnkb',
     name: 'sid',
+    saveUninitialized: true,
+    resave: true
 }))
 app.use(passport.initialize());
 app.use(passport.session());

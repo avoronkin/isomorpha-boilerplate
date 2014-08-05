@@ -10,7 +10,7 @@ var compass = require('gulp-compass');
 var wait = require('gulp-wait');
 var watch = require('gulp-watch');
 var clean = require('gulp-clean');
-var runSequence = require('gulp-run-sequence');
+var runSequence = require('run-sequence');
 var reactify = require('reactify');
 
 
@@ -75,11 +75,11 @@ gulp.task('browser_scripts', function () {
         transform: ['reactify'],
         shim: {
             isArray: {
-                path: 'components/yields/isarray/1.0.0/index.js',
+                path: 'components/yields-isarray/index.js',
                 exports: 'isArray'
             },
             props: {
-                path: 'components/component/props/1.1.2/index.js',
+                path: 'components/component-props/index.js',
                 exports: null
             },
             emitter: {
