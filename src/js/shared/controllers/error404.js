@@ -1,14 +1,7 @@
-var isClient = (typeof window != "undefined");
-if (!isClient) {
-    require('node-jsx').install({
-        extension: '.jsx'
-    });
-}
-
+require('../nodejsx.js');
 var errorComponent = require('../components/error404.jsx');
 
-module.exports = function (req, res) {
-  console.log('error component', errorComponent);
-    res.locals.title = 'Page not found';
-    res.renderComponent(errorComponent);
+module.exports = function(req, res) {
+  res.locals.title = 'Page not found';
+  res.renderComponent(errorComponent);
 }

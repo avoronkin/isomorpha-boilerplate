@@ -1,10 +1,5 @@
-var isClient = (typeof window != "undefined");
-if (!isClient) {
-    require('node-jsx').install({
-        extension: '.jsx'
-    });
-}
-
+require('../nodejsx.js');
+var isClient = require('is-browser');
 var homeComponent = require('../components/home.jsx');
 
 module.exports = function (req, res) {

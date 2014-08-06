@@ -5,12 +5,7 @@ var mediator = require('../mediator');
 var acl = require('../acl');
 var async = require('async');
 
-if (!isClient) {
-    var nodeJsx = require('node-jsx');
-    nodeJsx.install({
-        extension: '.jsx'
-    });
-}
+require('../nodejsx.js');
 
 var listComponent = require('../components/example.jsx').list;
 var editComponent = require('../components/example.jsx').edit;

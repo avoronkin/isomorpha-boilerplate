@@ -16,12 +16,13 @@ page(function(req, res, next){
     res.locals.isAuthenticated = req.isAuthenticated();
 
     res.redirect = function(path){
-        page.show(path); 
+      window.location.href = path;
+        // page(path);
     }
     next();
 });
 
-mediator.on('redirect', page.bind(this));
+//mediator.on('redirect', page.bind(this));
 
 page(reactMiddleware(settings.reactMiddleware));
 
