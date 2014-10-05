@@ -61,7 +61,7 @@ gulp.task('browser_scripts', function () {
         js_build_name = 'build_' + (new Date()).getTime();
     }
 
-    return gulp.src('./src/js/browser/app.js', {
+    return gulp.src('./node_modules/app/browser/app.js', {
         read: false
     }).pipe(browserify({
         ignore: [
@@ -117,14 +117,14 @@ gulp.task('styles', function () {
 
 gulp.task('nodemon', function () {
     nodemon({
-        script: 'src/js/server/app.js',
+        script: 'node_modules/app/server/app.js',
         // ext: 'js css html',
         //watch: ['dist/**/*']
     });
 });
 
 gulp.task('watch_browser_scripts', function () {
-    gulp.watch(['./src/js/browser/**/*', './src/js/shared/**/*'], ['browser_scripts']);
+    gulp.watch(['./node_modules/app/browser/**/*', './node_modules/app/shared/**/*'], ['browser_scripts']);
 });
 
 gulp.task('watch_styles', function () {
